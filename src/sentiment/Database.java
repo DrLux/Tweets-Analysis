@@ -135,7 +135,7 @@ public class Database {
     }
     
     public void InsertData(String sentiment, String word, String type){
-        if (TableExists(sentiment.toUpperCase() +"_"+type)){
+        //if (TableExists(sentiment.toUpperCase() +"_"+type)){
             try {
                     type = type.toUpperCase();
                     Statement stmt = this.connection.createStatement();
@@ -160,11 +160,11 @@ public class Database {
                 } catch (SQLException ex) {
                     Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        }
+        //}
     }
     
     public void insertWordSentiment(String word, String sentiment){
-        if (TableExists(sentiment.toUpperCase())){
+        //if (TableExists(sentiment.toUpperCase())){
             try {
                 if (word.contains("'"))
                     word = word.replaceAll("'", "''");
@@ -190,11 +190,11 @@ public class Database {
                 } catch (SQLException ex) {
                     Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        }
+        //}
     }
     
     public void insertScoreSentiment(String word, String score, String filename, String sentiment){
-        if (TableExists(sentiment.toUpperCase())){
+        //if (TableExists(sentiment.toUpperCase())){
             try {
                 if (word.contains("'"))
                     word = word.replaceAll("'", "''");
@@ -210,11 +210,11 @@ public class Database {
             } catch (SQLException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }        
+        //}        
     }
   
     public void InsertData(String NameTable, int numParameters, String word, String score){
-        if (!word.contains("_") && TableExists(NameTable.toUpperCase())){
+        if (!word.contains("_")){ //&& TableExists(NameTable.toUpperCase())){
             if (word.contains("'"))
                 word = word.replaceAll("'", "''");
             try {
@@ -251,7 +251,7 @@ public class Database {
     public String getWordScore(String word, String nameTable){         
         String res = "0,0";
         nameTable = nameTable.toUpperCase();
-        if (TableExists(nameTable)){
+        //if (TableExists(nameTable)){
             try {
                 Statement stmt = this.connection.createStatement();
                 String sql = "select * from \"SYSTEM\".\"" + nameTable +"\" where WORD = '"+word+"'";
@@ -270,7 +270,7 @@ public class Database {
             } catch (SQLException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        //}
         return res;
     }
     
@@ -304,7 +304,7 @@ public class Database {
     public List<String> getWordFrequency(String sentiment,String type_word, int limit){
         sentiment = sentiment.toUpperCase();
         List<String> word_frequency = null;
-        if (TableExists(sentiment)){           
+        //if (TableExists(sentiment)){           
             try {
                 type_word = type_word.toUpperCase();
                 sentiment = sentiment.toUpperCase();
@@ -333,7 +333,7 @@ public class Database {
             } catch (SQLException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
             }             
-        }
+        //}
         return word_frequency;
     }
 }

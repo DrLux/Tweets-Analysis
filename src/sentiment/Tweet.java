@@ -69,8 +69,9 @@ public class Tweet {
                     parseTweet(SlangWords.ALL_SLANG_WORDS.get(t));
                 } else {
                     t = t.replaceAll("[,?!.;:\\/()& _+=<>'']", "");
-                    if (t.startsWith("#") && t.length() > 2){
-                        fh.db.InsertData(sentiment,t, "HASHTAG");
+                    if (t.startsWith("#")){
+                        if (t.length() > 2)
+                            fh.db.InsertData(sentiment,t, "HASHTAG");
                     } else {
                         if (!t.contains("URL") && !t.contains("USERNAME") && !sw.isStopword(t) && (t.length() > 2)){
                             stem_token = stemmer.stem(t.toLowerCase());

@@ -2,14 +2,17 @@ package sentiment;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,9 +25,11 @@ public class FilesHandler {
     Database db = null;
     List<String> listFiles = null;
     Boolean initDbs = true;
+    MongoDB mongo = null;
             
-    public FilesHandler(Database db, Boolean initDbs){ // initDbs= se true crea da 0 tutto il db
+    public FilesHandler(Database db, Boolean initDbs, MongoDB mongo){ // initDbs= se true crea da 0 tutto il db
         this.db = db;
+        this.mongo = mongo;
         File root = new File( "files/" ); 
         File[] list = root.listFiles();
         this.listFiles = new ArrayList<String>();     
@@ -45,17 +50,20 @@ public class FilesHandler {
        
         while ((line = br.readLine()) != null) {
             String[] splited = line.split("\\s+");
-            if (tableIsPresent == false){
+            
+            /*if (tableIsPresent == false){
                 if (splited.length == 1 )
                      db.CreateTableFromFile(filename,1);            
                 else
                      db.CreateTableFromFile(filename,2);
                 tableIsPresent = true;
-            }
-            if (splited.length == 1 )
+            }*/
+            mongo.processLine(mongo.getCollection(filename), splited);
+            /*if (splited.length == 1 )
                 db.InsertData(filename, splited.length, splited[0], "0");            
             else
-                db.InsertData(filename, splited.length, splited[0], splited[1].replace(".",","));            
+                db.InsertData(filename, splited.length, splited[0], splited[1].replace(".",","));
+            */
         }
         try {
                 if (br != null)br.close();
@@ -116,6 +124,7 @@ public class FilesHandler {
         }
     }
     
+        
     public void insertWords(String original_word, String stem_word, String sentiment){
         String score = "";
         db.insertWordSentiment(original_word, sentiment);
@@ -146,5 +155,36 @@ public class FilesHandler {
             
     }
     
+    public void splitTweets(String sentiment){
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("tweets/dataset_dt_" +sentiment+ "_60k.txt"));
+            String line = "";
+            int i = 0;
+            Path path;
+            String percorso= "";
+            File newFile = null;
+            int indice_file = 0;
+            try {
+                while (line != null) {
+                    i = 0;
+                    indice_file += 1;
+                    percorso = "C:\\Users\\sorre\\Desktop\\Git\\Tweets-Analysis\\tweets\\/"+sentiment+"/"+sentiment+"_"+indice_file+".txt";
+                    System.out.println(percorso);
+                    path = Paths.get(percorso);
+                    newFile = new File(percorso);
+                    if (!Files.exists(path))
+                        newFile.createNewFile();
+                    for (i = 0; i < 10000 && line != null; i++){
+                        line = br.readLine();
+                        Files.write(path, Arrays.asList(line), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Tweet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Tweet.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
        
 }
