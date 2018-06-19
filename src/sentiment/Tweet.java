@@ -36,7 +36,8 @@ public class Tweet {
     
     public void loadTweets(){
         try {
-            BufferedReader br = new BufferedReader(new FileReader("tweets/dataset_dt_"+this.sentiment+"_60k.txt"));
+            //BufferedReader br = new BufferedReader(new FileReader("tweets/dataset_dt_"+this.sentiment+"_60k.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("tweets/"+this.sentiment+".txt"));
             String line = "";
             try {
                 while ((line = br.readLine()) != null) {
@@ -62,21 +63,25 @@ public class Tweet {
         String stem_token = "";
         
         for (String t : tokens){
-            if (Emoticons.ALL_EMOTICONS.containsKey(t))
-                fh.db.InsertData(sentiment,t, "EMOTICON");
-            else {
+            if (Emoticons.ALL_EMOTICONS.containsKey(t)){
+                //fh.db.InsertData(sentiment,t, "EMOTICON");
+                fh.mongo.insertWord(sentiment,t, "EMOTICON");
+            } else {
                 if (SlangWords.ALL_SLANG_WORDS.containsKey(t)){
-                    parseTweet(SlangWords.ALL_SLANG_WORDS.get(t));
+                    parseTweet(SlangWords.ALL_SLANG_WORDS.get(t)); //aggiungo ricorsivamente nuove parole da parsificare (le rispettive dello slang)
                 } else {
                     t = t.replaceAll("[,?!.;:\\/()& _+=<>'']", "");
                     if (t.startsWith("#")){
-                        if (t.length() > 2)
-                            fh.db.InsertData(sentiment,t, "HASHTAG");
+                        if (t.length() > 2){
+                            //fh.db.InsertData(sentiment,t, "HASHTAG");
+                            fh.mongo.insertWord(sentiment,t, "HASHTAG");
+                        }
                     } else {
                         if (!t.contains("URL") && !t.contains("USERNAME") && !sw.isStopword(t) && (t.length() > 2)){
                             stem_token = stemmer.stem(t.toLowerCase());
                             stem_token = stem_token.trim();
-                            fh.insertWords(t,stem_token,sentiment);
+                            //fh.insertWords(t,stem_token,sentiment);
+                            fh.mongo.insertWord(sentiment,t, "WORD");
                         }
                     }
                 }
@@ -84,7 +89,8 @@ public class Tweet {
         }
         List<String> matchedEmojiList = emo.getMatchedEmotjiList();
         for(int i=0; i < matchedEmojiList.size(); i++){
-            fh.db.InsertData(sentiment,matchedEmojiList.get(i), "EMOJI");
+            //fh.db.InsertData(sentiment,matchedEmojiList.get(i), "EMOJI");
+            fh.mongo.insertWord(sentiment,matchedEmojiList.get(i), "EMOJI");
         }
     }
 }

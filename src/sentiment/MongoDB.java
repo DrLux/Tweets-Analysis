@@ -13,6 +13,7 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
+import static com.mongodb.client.model.Filters.exists;
 import static java.lang.String.valueOf;
 import static java.sql.JDBCType.INTEGER;
 import java.util.List;
@@ -26,7 +27,7 @@ public class MongoDB {
     
     public MongoDB(){
         mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27000"));
-        database = mongoClient.getDB("Sentiment");               
+        database = mongoClient.getDB("Sentiment");
     }
     
     public MongoClient secondaryClient (int port){
@@ -142,21 +143,60 @@ public class MongoDB {
     }
 
     public void provaMap(){   
+        DBCollection collection = null;
+        
+        String map_freq ="function () {"+
+                    "emit(this.WORD, { FREQUENCY : 1});"+
+                    "}";
+        
+        String reduce_freq = "function (word,value) { "+
+                        "FREQUENCY = 0;"+
+                        "for (var i in value) {"+
+                        "   FREQUENCY += value[i].FREQUENCY;"+
+                        "}"+
+                        "return {FREQUENCY} }";
+        collection = database.getCollection("anger");
+        collection.mapReduce(map_freq, reduce_freq, "prova3", MapReduceCommand.OutputType.REDUCE,null);
+      
+        String map_words ="function () {"+
+                    "emit(this.WORD, { SENTIMENT: this.SENTIMENT , TYPE: this.TYPE} );"+
+                    "}";
+        
+        String reduce = "function (word,value) { "+
+                        "return {FREQUENCY : value[1].FREQUENCY, SENTIMENT: value[0].SENTIMENT , TYPE: value[0].TYPE} }";
+
+
+        collection = database.getCollection("anger");
+        collection.mapReduce(map_words, reduce, "prova3", MapReduceCommand.OutputType.REDUCE,null);
+        
         
         String map_res ="function () {"+
-                    "emit(this.WORD, {SCORE : this.SCORE});"+
+                    "emit(this.WORD, {anewAro_tab: this.SCORE});"+
                     "}";
         
-        String map_words ="function () {"+
-                    "emit(this.WORD, {SCORE : this.SENTIMENT});"+
-                    "}";
+        reduce = "function (word,value) { "+
+                "return {anewAro_tab: value[1].anewAro_tab, FREQUENCY : value[0].FREQUENCY, SENTIMENT: value[0].SENTIMENT , TYPE: value[0].TYPE} }";
         
-        String reduce = "function (key,values) { "+
-                        " return {key} }";
+        collection = database.getCollection("anewAro_tab");
+        collection.mapReduce(map_res, reduce, "prova3", MapReduceCommand.OutputType.REDUCE ,null );
+        collection.remove((DBObject) exists("value.SENTIMENT", false));
         
-        database.getCollection("prova1").mapReduce(map_res, reduce, "prova3", MapReduceCommand.OutputType.REDUCE , null);
-        database.getCollection("prova2").mapReduce(map_words, reduce, "prova3", MapReduceCommand.OutputType.REDUCE , null);
-                       
+        map_res ="function () {"+
+                "emit(this.WORD, {Dal_Imag: this.SCORE});"+
+                "}";
+        
+        reduce = "function (word,value) { "+
+                "return {Dal_Imag: value[0].Dal_Imag, FREQUENCY : value[1].FREQUENCY, SENTIMENT: value[1].SENTIMENT , TYPE: value[1].TYPE} }";
+                //"return {value} }";
+        
+        //database.getCollection("Dal_Imag").mapReduce(map_res, reduce, "prova3", MapReduceCommand.OutputType.REDUCE ,null);
+        
+        
+    }
+    
+    public void insertWord(String sentiment, String word, String type){
+        DBObject obj_word = new BasicDBObject("SENTIMENT", sentiment).append("WORD", word).append("TYPE", type);
+        generalInsertion(database.getCollection(sentiment), obj_word);
     }
     
     /*

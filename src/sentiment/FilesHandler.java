@@ -155,6 +155,8 @@ public class FilesHandler {
             
     }
     
+    
+    
     public void splitTweets(String sentiment){
         try {
             BufferedReader br = new BufferedReader(new FileReader("tweets/dataset_dt_" +sentiment+ "_60k.txt"));
