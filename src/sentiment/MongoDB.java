@@ -168,6 +168,7 @@ public class MongoDB {
 
         collection = database.getCollection("anger");
         collection.mapReduce(map_words, reduce, "prova3", MapReduceCommand.OutputType.REDUCE,null);
+        collection.mapReduce(map_words, reduce, "prova4", MapReduceCommand.OutputType.REDUCE,null);
         
         
         String map_res ="function () {"+
@@ -179,7 +180,6 @@ public class MongoDB {
         
         collection = database.getCollection("anewAro_tab");
         collection.mapReduce(map_res, reduce, "prova3", MapReduceCommand.OutputType.REDUCE ,null );
-        collection.remove((DBObject) exists("value.SENTIMENT", false));
         
         map_res ="function () {"+
                 "emit(this.WORD, {Dal_Imag: this.SCORE});"+
@@ -187,10 +187,9 @@ public class MongoDB {
         
         reduce = "function (word,value) { "+
                 "return {Dal_Imag: value[0].Dal_Imag, FREQUENCY : value[1].FREQUENCY, SENTIMENT: value[1].SENTIMENT , TYPE: value[1].TYPE} }";
-                //"return {value} }";
-        
-        //database.getCollection("Dal_Imag").mapReduce(map_res, reduce, "prova3", MapReduceCommand.OutputType.REDUCE ,null);
-        
+                
+        collection = database.getCollection("Dal_Imag");
+        collection.mapReduce(map_res, reduce, "prova4", MapReduceCommand.OutputType.REDUCE ,null);  
         
     }
     

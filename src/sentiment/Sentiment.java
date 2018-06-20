@@ -19,6 +19,7 @@ public class Sentiment {
         MongoDB mongo = new MongoDB();
         
         mongo.provaMap();
+        
         //FilesHandler fh = new FilesHandler(db, false, mongo);
         //Tweet tweet = new Tweet("anger",fh);
         //tweet.loadTweets();
