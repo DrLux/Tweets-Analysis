@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sentiment;
 
 import java.util.Collections;
@@ -11,7 +6,7 @@ import java.util.Map;
 
 /**
  *
- * @author sorre
+ * @author Luca Sorrentino
  */
 public class SlangWords {
     static final Map<String, String> ALL_SLANG_WORDS; 

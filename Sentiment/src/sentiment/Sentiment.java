@@ -1,11 +1,6 @@
 package sentiment;
 
-import com.mongodb.Mongo;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import org.apache.spark.api.java.JavaPairRDD;
 import scala.Tuple2;
 
@@ -75,10 +70,10 @@ public class Sentiment {
     }
     
     public void dump_for_wordcloud(){
-        mongo.dumpWordFrequency(sentiment, "word");
-        mongo.dumpWordFrequency(sentiment, "hashtag");
-        mongo.dumpWordFrequency(sentiment, "emoticon");
-        mongo.dumpWordFrequency(sentiment, "emoji");
+        mongo.dumpWordFrequency(sentiment, "word", 100);
+        mongo.dumpWordFrequency(sentiment, "hashtag", 10);
+        mongo.dumpWordFrequency(sentiment, "emoticon", 0);
+        mongo.dumpWordFrequency(sentiment, "emoji", 5);
     }
     
 }

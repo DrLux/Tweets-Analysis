@@ -1,8 +1,5 @@
 package sentiment;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
@@ -19,16 +16,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 /**
- *
  * @author Luca Sorrentino
  */
 public class MongoDb {
@@ -77,15 +71,15 @@ public class MongoDb {
             
     }
     
-    public void dumpWordFrequency(String sentiment, String type){
+    public void dumpWordFrequency(String sentiment, String type, int treshold){
         try {
             
             FileOutputStream fos = new FileOutputStream("dump/"+sentiment+"_"+type+".txt");
             OutputStreamWriter w = new OutputStreamWriter(fos, "UTF-8");
             BufferedWriter bw = new BufferedWriter(w);
 
-            Bson query = new BasicDBObject("TYPE", type.toUpperCase());
-            FindIterable<Document> document = database.getCollection(sentiment).find(query).projection(Projections.fields(Projections.include("WORD"), Projections.include("FREQUENCY")));
+            FindIterable<Document> document = database.getCollection("anger").find(
+            new Document("FREQUENCY", new Document("$gte", treshold))).projection(Projections.fields(Projections.include("WORD"), Projections.include("FREQUENCY")));
             for (Document doc : document) 
                 bw.append(doc.get("WORD")+" : "+ doc.get("FREQUENCY")+"\n");
             

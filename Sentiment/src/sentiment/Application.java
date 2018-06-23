@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sentiment;
 
 import java.io.FileNotFoundException;
@@ -23,6 +18,7 @@ public class Application {
         List<String> AllSentiments = Arrays.asList("anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust");
         Sentiment senti;
         
+        mongo.setCollection("anger");
         for (String sentiment : AllSentiments)
             senti = new Sentiment(sentiment,resources, spark, oracle, mongo);        
     }    
