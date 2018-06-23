@@ -45,7 +45,7 @@ public class Sentiment {
         for (String r : resource)
             this.processed_tweet = spark.process_resource(this.res.nameToResources(r), processed_tweet, r);
         
-        processed_tweet = spark.filterResults(0, processed_tweet);
+        processed_tweet = spark.filterResults(10, processed_tweet);
         
         //ps.quitSpark();
     }   
