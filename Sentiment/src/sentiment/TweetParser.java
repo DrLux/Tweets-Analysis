@@ -10,17 +10,15 @@ import java.util.logging.Logger;
  * @author Sorrentino Luca
  */
 public class TweetParser {
-    StopWords sw = null;
-    String sentiment = null;
-    List<WordWrapper> listWordWrapper = null;
+    private StopWords sw = null;
+    private String sentiment = null;
+    private List<WordWrapper> listWordWrapper = null;
     
     public TweetParser(){
         this.sentiment = sentiment;
         this.sw = new StopWords();        
         listWordWrapper = new ArrayList<WordWrapper>();
-    }
-
-    
+    }    
     
     public void setSentiment(String sent){
         this.sentiment = sent;

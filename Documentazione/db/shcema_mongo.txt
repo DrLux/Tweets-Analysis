@@ -1,0 +1,7 @@
+Document document = new Document("SENTIMENT", String sentiment)
+                                        .append("WORD", String word)
+                                        .append("TYPE", String type)
+                                        .append("FREQUENCY", int freq)
+                                        .append("RESOURCES", Set<String> resources)
+                                        .append("SCORE_RESOURCES", Map<String, Float> resorcesWithScore);
+this.collection.insertOne(document);

@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author sorre
- */
+
 public class Emoji {
-    String regexPattern = "";          
-    Pattern pattern = null;
-    Matcher matcher = null;
-    List<String> matchedEmojiList = null;
+    private String regexPattern = "";          
+    private Pattern pattern = null;
+    private Matcher matcher = null;
+    private List<String> matchedEmojiList = null;
     
     
         public Emoji(){

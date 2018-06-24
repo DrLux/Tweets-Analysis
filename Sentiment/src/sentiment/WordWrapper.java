@@ -14,7 +14,7 @@ public class WordWrapper implements Serializable{
     private String type;
     private String word;
     private int frequency;
-    Stemmer stemmer; 
+    private Stemmer stemmer; 
     private Set<String> resources;
     private Map<String, Float> resorcesWithScore;
 
