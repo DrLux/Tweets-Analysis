@@ -32,7 +32,7 @@ public class MongoDb {
 
     
     public MongoDb(int port, Boolean isSecondary){
-        if (isSecondary){
+        if (!isSecondary){
             this.mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:"+port));
         } else {
             MongoClientOptions l_opts =
