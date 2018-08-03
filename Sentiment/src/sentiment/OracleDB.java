@@ -19,8 +19,7 @@ import org.apache.spark.sql.catalog.Database;
 public class OracleDB {
     private Connection connection = null;
     private DatabaseMetaData dbm = null;
-    
-    
+
     public OracleDB(String user, String pass){
         System.out.println("Searching for Oracle JDBC driver...");
  
@@ -132,6 +131,5 @@ public class OracleDB {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
+    }   
 }

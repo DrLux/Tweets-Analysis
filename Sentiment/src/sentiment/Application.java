@@ -21,7 +21,7 @@ public class Application {
         mongo.setCollection("anger");
         for (String sentiment : AllSentiments)
             senti = new Sentiment(sentiment,resources, spark, oracle, mongo);        
-    }    
+    } 
     
     
 }
