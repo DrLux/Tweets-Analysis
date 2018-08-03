@@ -1,7 +1,7 @@
 ### Tweets-Analysis ###
 University project of 2018
 
-The project consists of reading about half a million tweets (already associated to the respective emotions), prasify them with # NLP techniques #, perform statistical analysis on the most frequent words for each emotion (using the # MapReduce paradigm available in Spark #) and then save the results in a relational DB and in a #NoSQL DB (I used MongoDB)#.
+The project consists of reading about half a million tweets (already associated to the respective emotions), prasify them with ### NLP techniques ###, perform statistical analysis on the most frequent words for each emotion (using the # MapReduce paradigm available in Spark #) and then save the results in a relational DB and in a #NoSQL DB (I used MongoDB)#.
 
 In the end, it was required to create Cloudwords associated with the various emotions.
 
